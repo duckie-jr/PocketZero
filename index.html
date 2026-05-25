@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>PocketZero</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Rotate screen shown on portrait phones -->
+  <div id="rotate-screen">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="6" width="28" height="36" rx="4"/>
+      <path d="M38 24 A14 14 0 1 1 30 11"/>
+      <polyline points="30,6 30,12 36,12"/>
+    </svg>
+    <p>Rotate your device to landscape</p>
+  </div>
+
+  <!-- Lock screen -->
+  <div id="lock-screen">
+    <div id="lock-time"></div>
+    <div id="lock-date"></div>
+    <div id="lock-hint">Swipe up or click to unlock</div>
+  </div>
+
+  <!-- Main shell -->
+  <div id="shell" style="display:none">
+
+    <!-- Status bar -->
+    <div id="status-bar">
+      <span id="status-time"></span>
+      <div id="status-icons">
+        <span id="status-wifi"></span>
+        <span id="status-battery"></span>
+      </div>
+    </div>
+
+    <!-- Notification banner -->
+    <div id="notification-banner"></div>
+
+    <!-- Home screen icon grid -->
+    <div id="home-screen"></div>
+
+    <!-- App window — apps render into this -->
+    <div id="app-window" style="display:none"></div>
+
+    <!-- Control Center (swipe up from bottom) -->
+    <div id="control-center">
+      <div id="cc-handle"></div>
+      <div id="cc-controls">
+        <div class="cc-row">
+          <div class="cc-tile" id="cc-darkmode">
+            <div class="cc-tile-icon" id="cc-darkmode-icon"></div>
+            <span>Dark Mode</span>
+          </div>
+          <div class="cc-tile" id="cc-sound">
+            <div class="cc-tile-icon" id="cc-sound-icon"></div>
+            <span>Sound</span>
+          </div>
+        </div>
+        <div class="cc-row">
+          <label class="cc-slider-label">
+            <span>Brightness</span>
+            <input type="range" id="cc-brightness" min="20" max="100" value="100" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom home bar -->
+    <div id="home-bar"></div>
+
+  </div>
+
+  <!-- Dialog overlay — managed by apps/dialog.js -->
+  <div id="dialog-overlay" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+  "></div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
