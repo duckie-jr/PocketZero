@@ -1,0 +1,585 @@
+/* ============================================================
+   CSS Variables / Theming
+   ============================================================ */
+:root {
+  --bg-primary: #f2f2f7;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e5e5ea;
+  --text-primary: #1c1c1e;
+  --text-secondary: #636366;
+  --text-muted: #aeaeb2;
+  --accent: #0a84ff;
+  --accent-hover: #0071e3;
+  --danger: #ff3b30;
+  --success: #30d158;
+  --border: rgba(0,0,0,0.1);
+  --shadow: 0 4px 24px rgba(0,0,0,0.12);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --icon-size: 60px;
+  --icon-radius: 14px;
+  --status-height: 32px;
+  --home-bar-height: 28px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --transition: 0.2s ease;
+  --blur: blur(20px);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1c1c1e;
+  --bg-secondary: #2c2c2e;
+  --bg-tertiary: #3a3a3c;
+  --text-primary: #ffffff;
+  --text-secondary: #ebebf5cc;
+  --text-muted: #ebebf599;
+  --border: rgba(255,255,255,0.1);
+  --shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font);
+  background: #000;
+  color: var(--text-primary);
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font);
+  border: none;
+  background: none;
+}
+
+input, textarea {
+  font-family: var(--font);
+}
+
+svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Rotate Screen
+   ============================================================ */
+#rotate-screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 15px;
+  text-align: center;
+}
+
+#rotate-screen svg {
+  width: 64px;
+  height: 64px;
+  color: #fff;
+  animation: rotateHint 2s ease-in-out infinite;
+}
+
+@keyframes rotateHint {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
+
+@media (orientation: portrait) and (max-width: 768px) {
+  #rotate-screen { display: flex; }
+  #lock-screen, #shell { display: none !important; }
+}
+
+/* ============================================================
+   Lock Screen
+   ============================================================ */
+#lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#lock-time {
+  font-size: clamp(48px, 10vw, 88px);
+  font-weight: 200;
+  color: #fff;
+  letter-spacing: -2px;
+}
+
+#lock-date {
+  font-size: clamp(14px, 2vw, 18px);
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+#lock-hint {
+  position: absolute;
+  bottom: 40px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Shell
+   ============================================================ */
+#shell {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+/* ============================================================
+   Status Bar
+   ============================================================ */
+#status-bar {
+  height: var(--status-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--bg-primary);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+#status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#status-wifi svg,
+#status-battery svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   Notification Banner
+   ============================================================ */
+#notification-banner {
+  position: absolute;
+  top: var(--status-height);
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  z-index: 50;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#notification-banner.visible {
+  transform: translateX(-50%) translateY(8px);
+}
+
+/* ============================================================
+   Home Screen
+   ============================================================ */
+#home-screen {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-content: start;
+  gap: 24px 8px;
+  padding: 24px 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#home-screen.five-col {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* App Icon */
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.app-icon-image {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: var(--icon-radius);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.15s ease;
+  color: var(--text-primary);
+}
+
+.app-icon-image svg {
+  width: 32px;
+  height: 32px;
+}
+
+.app-icon:active .app-icon-image {
+  transform: scale(0.88);
+  box-shadow: none;
+}
+
+.app-icon-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   App Window
+   ============================================================ */
+#app-window {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  z-index: 20;
+  overflow: hidden;
+}
+
+@keyframes appOpen {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes appClose {
+  from { transform: scale(1);    opacity: 1; }
+  to   { transform: scale(0.92); opacity: 0; }
+}
+
+#app-window.app-opening {
+  animation: appOpen 0.28s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+#app-window.app-closing {
+  animation: appClose 0.22s ease-in forwards;
+}
+
+/* ============================================================
+   App Chrome (title bar shared by all apps)
+   ============================================================ */
+.app-chrome {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.app-chrome-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.app-chrome-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background var(--transition);
+  cursor: pointer;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+}
+
+.app-chrome-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.app-chrome-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.app-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================================
+   Control Center
+   ============================================================ */
+#control-center {
+  position: absolute;
+  bottom: -200px;
+  left: 0; right: 0;
+  background: rgba(var(--bg-secondary-raw, 255,255,255), 0.85);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius) var(--radius) 0 0;
+  z-index: 40;
+  transition: bottom 0.35s cubic-bezier(0.34, 1.1, 0.64, 1);
+  padding-bottom: 20px;
+}
+
+#control-center.open {
+  bottom: 0;
+}
+
+#cc-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--text-muted);
+  border-radius: 2px;
+  margin: 10px auto 14px;
+}
+
+#cc-controls {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cc-row {
+  display: flex;
+  gap: 12px;
+}
+
+.cc-tile {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background var(--transition);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cc-tile.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cc-tile-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cc-slider-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cc-slider-label input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+/* ============================================================
+   Home Bar
+   ============================================================ */
+#home-bar {
+  height: var(--home-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+#home-bar::after {
+  content: '';
+  width: 120px;
+  height: 4px;
+  background: var(--text-muted);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Shared UI Components (used across apps)
+   ============================================================ */
+
+/* Card */
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Input */
+.pz-input {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.pz-input:focus {
+  border-color: var(--accent);
+}
+
+/* Button */
+.pz-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pz-btn:hover { background: var(--accent-hover); }
+.pz-btn:active { transform: scale(0.97); }
+
+.pz-btn.secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.pz-btn.danger {
+  background: var(--danger);
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tab-bar-btn {
+  flex: 1;
+  padding: 10px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.tab-bar-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Empty state */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-state svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+}
+
+/* ============================================================
+   Dialog
+   ============================================================ */
+@keyframes dialogPop {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
