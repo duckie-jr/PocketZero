@@ -1,24 +1,18 @@
 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
+  <!-- Rounded square background -->
   <rect width="512" height="512" rx="112" fill="#0a0a1a"/>
-  <!-- P — filled -->
-  <text
-    x="28"
-    y="400"
-    font-family="Arial Black, sans-serif"
-    font-weight="900"
-    font-size="380"
-    fill="#ffffff"
-    letter-spacing="-20">P</text>
-  <!-- 0 — outlined only -->
-  <text
-    x="248"
-    y="400"
-    font-family="Arial Black, sans-serif"
-    font-weight="900"
-    font-size="380"
-    fill="none"
-    stroke="#ffffff"
-    stroke-width="18"
-    letter-spacing="-20">0</text>
+
+  <!-- P — built from 4 overlapping rectangles, no font needed -->
+  <!-- Vertical stem -->
+  <rect x="68" y="110" width="52" height="296" rx="10" fill="#ffffff"/>
+  <!-- Top horizontal cap -->
+  <rect x="68" y="110" width="180" height="52" rx="10" fill="#ffffff"/>
+  <!-- Bowl right wall -->
+  <rect x="196" y="110" width="52" height="164" rx="10" fill="#ffffff"/>
+  <!-- Bowl bottom cap -->
+  <rect x="68" y="222" width="180" height="52" rx="10" fill="#ffffff"/>
+
+  <!-- 0 — white ring: large white circle with a dark circle punched through the centre -->
+  <circle cx="386" cy="258" r="106" fill="#ffffff"/>
+  <circle cx="386" cy="258" r="60"  fill="#0a0a1a"/>
 </svg>
