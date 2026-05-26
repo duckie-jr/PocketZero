@@ -35,9 +35,10 @@ function renderSettings(container) {
     }
 
     function applyWallpaper(value) {
-        const homeScreen = document.getElementById('home-screen');
-        if (homeScreen) {
-            homeScreen.style.background = value;
+        // Set on #shell so wallpaper shows behind the transparent status bar and home bar
+        const shell = document.getElementById('shell');
+        if (shell) {
+            shell.style.background = value;
         }
     }
 
