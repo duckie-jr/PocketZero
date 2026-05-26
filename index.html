@@ -23,7 +23,7 @@
   <meta property="og:type" content="website" />
 
   <title>PocketZero</title>
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="./manifest.json" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -43,7 +43,12 @@
   <div id="lock-screen">
     <div id="lock-time"></div>
     <div id="lock-date"></div>
-
+    <div id="lock-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+      <span>swipe up</span>
+    </div>
   </div>
 
   <!-- Main shell -->
@@ -52,10 +57,7 @@
     <!-- Status bar -->
     <div id="status-bar">
       <span id="status-time"></span>
-      <div id="status-icons">
-        <span id="status-wifi"></span>
-        <span id="status-battery"></span>
-      </div>
+
     </div>
 
     <!-- Notification banner -->
