@@ -1,4 +1,5 @@
 import { AppRegistry } from './apps/registry.js';
+import { Background } from './apps/background.js';
 import { Router } from './apps/router.js';
 import { Store } from './apps/store.js';
 import { Dialog } from './apps/dialog.js';
@@ -142,6 +143,8 @@ window.PocketZero = {
     Http,
     // Rebuild the home screen icon grid
     buildHomeScreen,
+    // Background / persistent app manager
+    Background,
 };
 
 // ── Home Bar — tap to go home ─────────────────────────────────
