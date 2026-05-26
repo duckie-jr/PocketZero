@@ -15,8 +15,8 @@
   --border: rgba(0,0,0,0.1);
   --shadow: 0 4px 24px rgba(0,0,0,0.12);
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-  --icon-size: 60px;
-  --icon-radius: 14px;
+  --icon-size: 64px;
+  --icon-radius: 16px;
   --status-height: 32px;
   --home-bar-height: 28px;
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -138,6 +138,33 @@ svg {
   letter-spacing: 0.5px;
 }
 
+#lock-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  animation: lockHintFloat 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+#lock-hint svg {
+  width: 22px;
+  height: 22px;
+}
+
+@keyframes lockHintFloat {
+  0%, 100% { opacity: 0.45; transform: translateX(-50%) translateY(0); }
+  50%       { opacity: 1;    transform: translateX(-50%) translateY(-8px); }
+}
+
 
 /* ============================================================
    Shell
@@ -158,28 +185,21 @@ svg {
   height: var(--status-height);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 16px;
-  background: var(--bg-primary);
-  font-size: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  letter-spacing: 0.3px;
   flex-shrink: 0;
   z-index: 10;
 }
 
-#status-icons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
 
-#status-wifi svg,
-#status-battery svg {
-  width: 18px;
-  height: 18px;
-  color: var(--text-primary);
-}
 
 /* ============================================================
    Notification Banner
@@ -213,11 +233,12 @@ svg {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  align-content: start;
-  gap: 24px 8px;
-  padding: 24px 16px;
+  align-content: center;
+  gap: 28px 8px;
+  padding: 20px 16px;
   overflow-y: auto;
   overflow-x: hidden;
+  background: transparent;
 }
 
 #home-screen.five-col {
@@ -250,8 +271,8 @@ svg {
 }
 
 .app-icon-image svg {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
 }
 
 .app-icon:active .app-icon-image {
@@ -262,7 +283,8 @@ svg {
 .app-icon-label {
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55), 0 0 8px rgba(0,0,0,0.3);
   text-align: center;
   max-width: 70px;
   overflow: hidden;
@@ -448,6 +470,7 @@ svg {
   justify-content: center;
   flex-shrink: 0;
   cursor: pointer;
+  background: transparent;
 }
 
 #home-bar::after {
