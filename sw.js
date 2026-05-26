@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pocketzero-v1';
+const CACHE_NAME = 'pocketzero-v2';
 
 const PRECACHE_URLS = [
   '/',
