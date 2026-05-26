@@ -1,6 +1,10 @@
 import { AppRegistry } from './registry.js';
 import { Router } from './router.js';
+import { Background } from './background.js';
 import { ICON_MUSIC, ICON_BACK } from '../icons/svg.js';
+
+// Keep music running in the background when the user navigates home
+Background.register('music');
 
 AppRegistry.register({
     id: 'music',
