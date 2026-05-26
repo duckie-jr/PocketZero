@@ -7,7 +7,7 @@ import { Badge } from './apps/badge.js';
 import { Sound } from './apps/sound.js';
 import { Http } from './apps/http.js';
 import { Notify } from './apps/notify.js';
-import { ICON_WIFI, ICON_BATTERY, ICON_DARKMODE, ICON_VOLUME } from './icons/svg.js';
+import { ICON_DARKMODE, ICON_VOLUME } from './icons/svg.js';
 import './apps/index.js';
 
 // Register service worker for PWA installability (required by Chrome for install prompt)
@@ -76,9 +76,6 @@ lockScreen.addEventListener('touchend', (e) => {
 }, { passive: true });
 
 // ── Status Bar ────────────────────────────────────────────────
-document.getElementById('status-wifi').innerHTML = ICON_WIFI;
-document.getElementById('status-battery').innerHTML = ICON_BATTERY;
-
 function updateStatusTime() {
     const statusTimeEl = document.getElementById('status-time');
     const now = new Date();
@@ -115,6 +112,11 @@ function buildHomeScreen() {
 
 // Rebuild home screen after all apps have registered
 setTimeout(buildHomeScreen, 0);
+
+// Apply saved wallpaper (or default) to the shell so it shows behind the status bar
+const defaultWallpaper = 'linear-gradient(160deg,#1a1a2e,#16213e)';
+const savedWallpaper = Store.get('wallpaper') ?? defaultWallpaper;
+document.getElementById('shell').style.background = savedWallpaper;
 
 // ── Global PocketZero API ─────────────────────────────────────
 // All modules are exposed here so apps loaded via the Play Store
