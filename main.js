@@ -10,6 +10,15 @@ import { Notify } from './apps/notify.js';
 import { ICON_WIFI, ICON_BATTERY, ICON_DARKMODE, ICON_VOLUME } from './icons/svg.js';
 import './apps/index.js';
 
+// Register service worker for PWA installability (required by Chrome for install prompt)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.warn('Service worker registration failed:', error);
+    });
+  });
+}
+
 // ── Theme ────────────────────────────────────────────────────
 function applyTheme(theme) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
