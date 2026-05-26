@@ -1,12 +1,17 @@
 {
+  "id": "/",
   "name": "PocketZero",
   "short_name": "PocketZero",
-  "description": "A simplified iOS-inspired web app for desktop and landscape phones.",
+  "description": "A lightweight iOS-inspired web OS shell built with vanilla HTML, CSS, and JavaScript.",
   "start_url": "/",
-  "display": "standalone",
+  "scope": "/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui", "browser"],
   "orientation": "landscape",
   "background_color": "#0a0a1a",
   "theme_color": "#0a0a1a",
+  "lang": "en-US",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/icon.svg",
@@ -22,5 +27,5 @@
     }
   ],
   "categories": ["utilities", "productivity", "games"],
-  "lang": "en"
+  "prefer_related_applications": false
 }
