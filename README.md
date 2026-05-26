@@ -1,74 +1,90 @@
 # PocketZero
 
-> A lightweight, iOS-inspired web OS shell — built with vanilla HTML, CSS, and JavaScript. No frameworks. No runtime dependencies.
+A web OS shell that runs in the browser. Looks and feels like a phone OS — lock screen, home screen, apps, control center. Built with vanilla HTML, CSS, and JS, no frameworks.
+
+**Live:** [duckie-jr.github.io/PocketZero](https://duckie-jr.github.io/PocketZero/)
+
+Designed for landscape on phones and desktops. Portrait shows a rotate prompt.
 
 ---
 
-## ✨ Features
+## Installing on your phone
 
-| Category | Details |
-|---|---|
-| 🏠 Home screen | App grid with icon badges, 4- or 5-column layout |
-| 🔒 Lock screen | Clock + swipe-to-unlock |
-| 🌗 Theming | Light / Dark / System — CSS custom properties |
-| 🔔 Notifications | Top-banner toasts |
-| 🗂️ Multi-app routing | Zoom-in/out transitions, back stack |
-| 💾 Persistence | `localStorage` via the Store API |
-| 🔊 Sound | Web Audio tones — respects global mute |
-| 🌐 HTTP | Fetch wrapper with JSON parsing and timeout |
-| 📦 Plugin-ready | Drop a file in `apps/` and it's on the home screen |
+Open the link in Chrome on Android → tap ⋮ → **Install app**. Works offline once installed.
 
 ---
 
-## 🚀 Quick Start
+## Apps
 
-```bash
-npx vite
-# then open http://localhost:5173
-```
+### Clock
+Four tabs: **Clock** (analog + digital), **Stopwatch**, **Timer** (countdown with alert), **Pomodoro** (work/break cycle).
 
-Or serve `index.html` with any static file server — no build step required.
+### Calculator
+Standard and scientific mode. Scientific adds sin, cos, tan, sqrt, log, ln, π, e, x², x³, 1/x. Calculation history is saved.
+
+### Notes
+Create, edit, delete notes. Search filters title and body in real time. Saved to localStorage.
+
+### To-Do
+Add, check off, and delete tasks. Filters: All / Active / Done. Badge on the home screen icon shows active task count.
+
+### Calendar
+Monthly view. Tap any day to add or delete events. Persists across sessions.
+
+### Weather
+Uses device GPS + [Open-Meteo](https://open-meteo.com/) — free, no API key. Shows temperature, wind speed, and condition. Caches last result.
+
+### Music
+Load audio files from your device. Playlist with play, pause, next, previous, shuffle. Live audio visualizer. No streaming — plays files you load yourself.
+
+### Browser
+iframe browser with a URL bar (falls back to Google search). Back/forward history, refresh, bookmarks on the new tab screen.
+
+### Settings
+Theme (Light/Dark/System), font size, grid columns (4 or 5), sound toggle, wallpaper presets (Midnight, Ocean, Forest, Dusk, Ember, Slate, Sand, Minimal).
+
+### Store
+Browse and install community apps. Paste custom JS to sideload your own app. Manage tab lets you remove installed apps.
+
+### Snake
+Classic snake on a 20×16 grid. On-screen D-pad or arrow keys. High score saved.
 
 ---
 
-## 📱 Built-in Apps
+## Building your own app
 
-| App | ID | Description |
-|---|---|---|
-| Clock | `clock` | Live digital clock |
-| Calculator | `calculator` | Standard arithmetic |
-| Notes | `notes` | Persistent text notes |
-| To-Do | `todo` | Task list with badges |
-| Calendar | `calendar` | Monthly calendar view |
-| Weather | `weather` | Current conditions via Open-Meteo |
-| Music | `music` | Playback controls UI |
-| Browser | `browser` | In-shell web browser |
-| Settings | `settings` | Theme, grid, sound, mute |
-| Play Store | `playstore` | Install community apps |
-| Snake | `snake` | Classic arcade game |
+### 1. Create the app file
 
----
-
-## 🔌 Adding a New App
-
-Two steps:
-
-1. Create `apps/yourapp.js` and register it:
+Create `apps/yourapp.js`. Every app calls `AppRegistry.register()` with at minimum an `id`, `name`, `icon`, and `render` function:
 
 ```js
-// apps/yourapp.js
+import { AppRegistry } from './registry.js';
+import { Router } from './router.js';
+
 AppRegistry.register({
-  id: 'yourapp',
-  name: 'My App',
-  icon: '<svg>…</svg>',          // any inline SVG
-  removable: false,              // true = user can uninstall
+  id: 'yourapp',         // unique, no spaces
+  name: 'My App',        // shown on home screen
+  icon: '<svg>…</svg>',  // inline SVG string
+  removable: false,      // true = user can uninstall from Store
   render(container) {
-    container.innerHTML = '<h1>Hello!</h1>';
+    // container is the #app-window div — write whatever HTML you want into it
+    container.innerHTML = `
+      <div class="app-chrome">
+        <button class="app-chrome-btn" id="back-btn">←</button>
+        <span class="app-chrome-title">My App</span>
+      </div>
+      <div class="app-body">
+        <p>Hello world</p>
+      </div>
+    `;
+    document.getElementById('back-btn').addEventListener('click', () => Router.home());
   }
 });
 ```
 
-2. Import it in `apps/index.js`:
+### 2. Register it
+
+Add one import line to `apps/index.js`:
 
 ```js
 import './yourapp.js';
@@ -76,167 +92,235 @@ import './yourapp.js';
 
 The icon appears on the home screen automatically — no other wiring needed.
 
+### CSS classes you can use
+
+These are already defined in `style.css`:
+
+| Class | What it is |
+|---|---|
+| `app-chrome` | top bar with back button + title |
+| `app-chrome-btn` | icon button in the top bar |
+| `app-chrome-title` | title text in the top bar |
+| `app-body` | scrollable content area below the chrome |
+| `card` | white/dark rounded card |
+| `pz-btn` | accent-coloured button |
+| `pz-btn secondary` | muted button |
+| `pz-input` | styled text input |
+| `tab-bar` / `tab-bar-btn` | horizontal tab strip |
+| `empty-state` | centred icon + message for empty lists |
+
 ---
 
-## 🧩 Full API Reference
+## API reference
 
-Every API is available as an ES module import for built-in apps, or via `window.PocketZero` for installed/store apps.
+All modules are importable in built-in apps. For Store/sideloaded apps that are `eval`'d, everything is available on `window.PocketZero`:
+
+```js
+const { Router, Store, Notify, Dialog, EventBus, Badge, Sound, Http, AppRegistry } = window.PocketZero;
+```
 
 ---
 
-### `AppRegistry` — app lifecycle
+### AppRegistry
 
 ```js
 AppRegistry.register({ id, name, icon, render, removable })
-AppRegistry.getAll()       // → App[]
-AppRegistry.getById(id)    // → App | null
-AppRegistry.remove(id)     // removes a removable app
+AppRegistry.getAll()        // → all registered apps
+AppRegistry.getById(id)     // → app object or null
+AppRegistry.remove(id)      // unregisters a removable app
 ```
 
 ---
 
-### `Router` — navigation
+### Router — navigation
 
 ```js
-Router.open(appId)     // open app (zoom-in animation)
-Router.back()          // go to previous screen
-Router.home()          // close app → home screen
-Router.getCurrent()    // → appId | null
+Router.open(appId)    // open an app (zoom-in animation)
+Router.back()         // go to the previous screen
+Router.home()         // close app and return to home screen
+Router.getCurrent()   // → current open appId or null
 ```
 
 ---
 
-### `Store` — localStorage wrapper
+### Store — localStorage wrapper
+
+Keys are namespaced automatically so apps don't collide.
 
 ```js
-Store.get(key)           // → parsed value | null
-Store.set(key, value)    // JSON-serialises and saves
-Store.remove(key)        // delete one key
-Store.clear()            // wipe all PocketZero data
+Store.get(key)          // → parsed value or null
+Store.set(key, value)   // JSON-serialises and saves
+Store.remove(key)       // delete one key
+Store.clear()           // wipe all PocketZero data
 ```
 
 ---
 
-### `Notify` — top-banner toast
+### Notify — top banner toast
 
 ```js
-Notify.show(message)                  // auto-dismiss after 3 s
-Notify.show(message, durationMs)      // custom duration
+Notify.show('Saved!')               // auto-dismisses after 3s
+Notify.show('Copied', 1500)         // custom duration in ms
 ```
 
 ---
 
-### `Dialog` — iOS-style modals *(async/await)*
+### Dialog — modal popups (async/await)
 
 ```js
 // Alert
-await Dialog.alert('Something happened')
+await Dialog.alert('Something went wrong')
 await Dialog.alert('Message', 'Title')
 
-// Confirm — returns boolean
-const ok = await Dialog.confirm('Delete this?')
-const ok = await Dialog.confirm('Sure?', 'Confirm', 'Yes', 'No')
+// Confirm — returns true or false
+const confirmed = await Dialog.confirm('Delete this?')
+const confirmed = await Dialog.confirm('Sure?', 'Title', 'Yes', 'No')
 
-// Prompt — returns string | null (null = cancelled)
-const name = await Dialog.prompt('Enter name')
-const name = await Dialog.prompt('Enter name', 'Default', 'Title', 'Placeholder…')
+// Prompt — returns the string entered, or null if cancelled
+const name = await Dialog.prompt('Enter a name')
+const name = await Dialog.prompt('Enter a name', 'default', 'Title', 'placeholder…')
 ```
 
 ---
 
-### `EventBus` — pub/sub messaging
+### EventBus — pub/sub between apps
 
 ```js
-EventBus.on('task:added', handler)       // subscribe
-EventBus.once('app:opened', handler)     // subscribe once
-EventBus.off('task:added', handler)      // unsubscribe
-EventBus.emit('task:added', payload)     // publish
-EventBus.clear('task:added')             // remove all listeners for event
-EventBus.clear()                         // remove every listener
+EventBus.on('event:name', handler)      // subscribe
+EventBus.once('event:name', handler)    // subscribe, fires once then unsubscribes
+EventBus.off('event:name', handler)     // unsubscribe
+EventBus.emit('event:name', payload)    // fire event
+EventBus.clear('event:name')            // remove all listeners for one event
+EventBus.clear()                        // remove all listeners everywhere
 ```
 
-**System events emitted by the shell:**
+System events the shell emits:
 
 | Event | Payload | When |
 |---|---|---|
-| `theme:changed` | `'light'` \| `'dark'` | User changes theme in Settings |
+| `theme:changed` | `'light'` or `'dark'` | User changes theme in Settings |
 
 ---
 
-### `Badge` — home screen icon bubbles
+### Badge — home screen icon bubbles
 
 ```js
-Badge.set('todo', 3)      // show red bubble with "3"
-Badge.set('todo', 0)      // remove badge
-Badge.get('todo')         // → number
-Badge.increment('todo')   // count + 1
-Badge.decrement('todo')   // count − 1  (floor 0)
-Badge.clear()             // remove all badges
-Badge.refresh()           // re-render after home screen rebuild
+Badge.set('yourapp', 3)   // show red badge with number
+Badge.set('yourapp', 0)   // remove badge
+Badge.get('yourapp')       // → current count
+Badge.increment('yourapp')
+Badge.decrement('yourapp') // floors at 0
+Badge.clear()              // remove all badges
+Badge.refresh()            // re-render badges after home screen rebuild
 ```
 
 ---
 
-### `Sound` — Web Audio tones
+### Sound — Web Audio tones
 
-All sounds silently no-op when the global mute toggle is on.
+All calls silently no-op when the user has muted sound in Settings.
 
 ```js
-Sound.click()                    // soft UI tick
-Sound.beep()                     // simple beep
-Sound.tone(440, 0.3)             // freq Hz, duration s
-Sound.tone(440, 0.3, 0.5)        // + gain (0–1)
-Sound.chord([261, 329, 392])     // play notes simultaneously
-Sound.success()                  // rising 3-note chime
-Sound.error()                    // low buzz
-Sound.notify()                   // soft ping
-Sound.alarm(3)                   // repeating alarm, N times
+Sound.click()                      // soft UI tick
+Sound.beep()                       // simple beep
+Sound.tone(440, 0.3)               // frequency Hz, duration seconds
+Sound.tone(440, 0.3, 0.5)          // + gain (0–1)
+Sound.chord([261, 329, 392])       // play multiple notes at once
+Sound.success()                    // rising 3-note chime
+Sound.error()                      // low buzz
+Sound.notify()                     // soft two-tone ping
+Sound.alarm(3)                     // repeating alarm, N times
 ```
 
 ---
 
-### `Http` — fetch wrapper
+### Http — fetch wrapper
+
+Returns parsed JSON automatically when the server responds with `Content-Type: application/json`, otherwise returns raw text.
 
 ```js
-// GET
 const data = await Http.get('https://api.example.com/data')
-const data = await Http.get(url, { timeout: 5000 })   // ms
+const data = await Http.get(url, { timeout: 5000 })
 
-// POST / PUT / DELETE
 const result = await Http.post(url, { key: 'value' })
 const result = await Http.put(url, body)
 const result = await Http.delete(url)
-
-// Raw response { data, status, ok }
-const { data, status, ok } = await Http.request(url, fetchOptions)
 ```
-
-Responses are automatically JSON-parsed when the `Content-Type` is `application/json`; otherwise raw text is returned.
 
 ---
 
-## 🗂️ File Structure
+---
+
+### Background — persistent background apps
+
+Lets an app stay loaded and running after the user navigates home. Audio, state, and DOM are fully preserved. The app's `render` function is only ever called once — reopening it just makes the container visible again.
+
+```js
+import { Background } from './background.js';
+
+// Declare this before AppRegistry.register() — marks the app as background-capable
+Background.register('myapp');
+
+// Check if an app is registered for background mode
+Background.isRegistered('myapp')   // → true
+
+// Check if the app has been opened at least once (container exists)
+Background.isAlive('myapp')        // → true / false
+
+// Permanently destroy a background app's container (e.g. on uninstall)
+Background.kill('myapp')
+```
+
+The Router handles everything else automatically — `Router.open()` and `Router.home()` both detect background-registered apps and mount/suspend instead of render/destroy.
+
+**Music** uses this so audio keeps playing when you leave the app.
+
+To make any other app background-capable, just add two lines to it:
+
+```js
+import { Background } from './background.js';
+Background.register('yourappid');
+```
+
+> For Store/sideloaded apps: `window.PocketZero.Background` exposes the same API.
+
+## Adding an app to the Store catalog
+
+Apps in `apps/store-catalog.js` appear in the **Browse** tab of the Store app. Each entry needs an `id`, `name`, `category`, `description`, and `version`. The actual app code is loaded separately.
+
+```js
+{
+  id: 'yourapp',
+  name: 'My App',
+  category: 'Utilities',   // Games | Productivity | Utilities
+  description: 'One sentence about what it does.',
+  version: '1.0.0',
+}
+```
+
+---
+
+## File structure
 
 ```
-index.html            ← single HTML shell
-style.css             ← global styles + CSS variables
-main.js               ← boots shell, exposes window.PocketZero
-manifest.json         ← PWA manifest
-
-icons/
-  svg.js              ← all SVG strings as named exports
+index.html          shell HTML
+style.css           global styles + CSS variables
+main.js             boots the shell, exposes window.PocketZero
+manifest.json       PWA manifest
+sw.js               service worker (offline cache)
 
 apps/
-  index.js            ← only file to edit when adding an app ✏️
-  registry.js         ← AppRegistry
-  router.js           ← Router
-  store.js            ← Store
-  notify.js           ← Notify
-  dialog.js           ← Dialog
-  eventbus.js         ← EventBus
-  badge.js            ← Badge
-  sound.js            ← Sound
-  http.js             ← Http
+  index.js          import your app here to register it
+  registry.js       AppRegistry
+  router.js         Router
+  store.js          Store
+  notify.js         Notify
+  dialog.js         Dialog
+  eventbus.js       EventBus
+  badge.js          Badge
+  sound.js          Sound
+  http.js           Http
+  store-catalog.js  list of Store apps
   clock.js
   calculator.js
   notes.js
@@ -247,20 +331,9 @@ apps/
   browser.js
   settings.js
   playstore.js
-  store-catalog.js
   games/
     snake.js
+
+icons/
+  svg.js            all SVG icon strings as named exports
 ```
-
----
-
-## 🛠️ Tech Stack
-
-- **Vanilla HTML / CSS / JS** — zero runtime dependencies
-- **Vite** — dev server + HMR only (no bundling required for production)
-- **localStorage** — all app data persisted client-side
-- **Web Audio API** — sound synthesis, no audio files
-- **[Open-Meteo](https://open-meteo.com/)** — free weather API, no key needed
-- **CSS custom properties** — light/dark theming throughout
-
-> Portrait phone layout shows a "rotate your device" screen. Desktop and landscape mobile are fully supported.
