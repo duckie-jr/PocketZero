@@ -6,7 +6,7 @@ export const STORE_CATALOG = [
     {
         id: 'snake',
         name: 'Snake',
-        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"> <polyline points="10,38 10,16 26,16 26,30 38,30 38,16"/> <rect x="32" y="10" width="11" height="9" rx="3" fill="currentColor" stroke="none"/> <circle cx="14" cy="43" r="3.5" fill="currentColor" stroke="none"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"> <polyline points="10,38 10,16 26,16 26,30 38,30 38,16"/> <rect x="32" y="10" width="11" height="9" rx="3" fill="white" stroke="none"/> <circle cx="14" cy="43" r="3.5" fill="white" stroke="none"/> </svg>',
         category: 'Games',
         description: "Classic snake game. Eat food, grow longer, don't hit the walls.",
         version: '1.0.0',
@@ -18,7 +18,7 @@ export const STORE_CATALOG = [
     {
         id: 'wordle',
         name: 'Wordle',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="currentColor" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="white" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>',',
         category: 'Games',
         description: 'Guess the 5-letter word in 6 tries. Color-coded hints after each guess.',
         version: '1.0.0',
@@ -29,7 +29,7 @@ export const STORE_CATALOG = [
     {
         id: 'game2048',
         name: '2048',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" stroke="currentColor" stroke-width="4" fill="none"/> <text x="24" y="30" font-size="15" font-weight="900" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">2048</text> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" stroke="white" stroke-width="4" fill="none"/> <text x="24" y="30" font-size="15" font-weight="900" text-anchor="middle" fill="white" font-family="system-ui,sans-serif">2048</text> </svg>',
         category: 'Games',
         description: 'Slide tiles to combine matching numbers and reach 2048.',
         version: '1.0.0',
@@ -40,7 +40,7 @@ export const STORE_CATALOG = [
     {
         id: 'tictactoe',
         name: 'Tic Tac Toe',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3" stroke-linecap="round"> <line x1="16" y1="4" x2="16" y2="44"/> <line x1="32" y1="4" x2="32" y2="44"/> <line x1="4" y1="16" x2="44" y2="16"/> <line x1="4" y1="32" x2="44" y2="32"/> <line x1="6" y1="6" x2="13" y2="13"/> <line x1="13" y1="6" x2="6" y2="13"/> <circle cx="38" cy="9.5" r="3.5"/> <circle cx="9.5" cy="38" r="3.5"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-width="3" stroke-linecap="round"> <line x1="16" y1="4" x2="16" y2="44"/> <line x1="32" y1="4" x2="32" y2="44"/> <line x1="4" y1="16" x2="44" y2="16"/> <line x1="4" y1="32" x2="44" y2="32"/> <line x1="6" y1="6" x2="13" y2="13"/> <line x1="13" y1="6" x2="6" y2="13"/> <circle cx="38" cy="9.5" r="3.5"/> <circle cx="9.5" cy="38" r="3.5"/> </svg>',
         category: 'Games',
         description: 'Classic 3x3 grid game against an unbeatable minimax AI.',
         version: '1.0.0',
@@ -51,7 +51,7 @@ export const STORE_CATALOG = [
     {
         id: 'minesweeper',
         name: 'Minesweeper',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" fill="currentColor"> <path d="M15.6,7.1a1.6,1.6,0,0,0,1.6-1.6v-2A1.6,1.6,0,0,0,15.6,2a1.5,1.5,0,0,0-1.5,1.5v2A1.6,1.6,0,0,0,15.6,7.1Z"/> <path d="M10.3,7.4a1.3,1.3,0,0,0,1,.4,1.5,1.5,0,0,0,1.1-.4,1.6,1.6,0,0,0,0-2.2L11,3.8a1.6,1.6,0,0,0-2.2,0,1.4,1.4,0,0,0,0,2.1Z"/> <path d="M11.1,10.6A1.5,1.5,0,0,0,9.6,9.1H7.5a1.5,1.5,0,0,0,0,3H9.6A1.5,1.5,0,0,0,11.1,10.6Z"/> <path d="M12.4,13.8a1.4,1.4,0,0,0-2.1,0L8.8,15.2a1.6,1.6,0,0,0,0,2.2,1.5,1.5,0,0,0,1.1.4,1.5,1.5,0,0,0,1.1-.4L12.4,16A1.6,1.6,0,0,0,12.4,13.8Z"/> <path d="M17.2,17.7v-2a1.6,1.6,0,0,0-1.6-1.6,1.6,1.6,0,0,0-1.5,1.6v2a1.5,1.5,0,0,0,1.5,1.5A1.6,1.6,0,0,0,17.2,17.7Z"/> <path d="M31.9,21V16.7H27.8V14.6a6,6,0,0,0-6.1-6H15.6a2,2,0,0,0,0,4h6.1a2,2,0,0,1,2.1,2v2.1H19.7V21a13.1,13.1,0,0,0-8.1,11.9c0,7.2,6.3,13.1,14.2,13.1S40,40.1,40,32.9A13.1,13.1,0,0,0,31.9,21ZM25.8,42c-5.6,0-10.2-4.1-10.2-9.1a9,9,0,0,1,5.7-8.2l2.5-1.1V20.7h4v2.9l2.4,1.1a8.9,8.9,0,0,1,5.7,8.2C35.9,37.9,31.4,42,25.8,42Z"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" fill="white"> <path d="M15.6,7.1a1.6,1.6,0,0,0,1.6-1.6v-2A1.6,1.6,0,0,0,15.6,2a1.5,1.5,0,0,0-1.5,1.5v2A1.6,1.6,0,0,0,15.6,7.1Z"/> <path d="M10.3,7.4a1.3,1.3,0,0,0,1,.4,1.5,1.5,0,0,0,1.1-.4,1.6,1.6,0,0,0,0-2.2L11,3.8a1.6,1.6,0,0,0-2.2,0,1.4,1.4,0,0,0,0,2.1Z"/> <path d="M11.1,10.6A1.5,1.5,0,0,0,9.6,9.1H7.5a1.5,1.5,0,0,0,0,3H9.6A1.5,1.5,0,0,0,11.1,10.6Z"/> <path d="M12.4,13.8a1.4,1.4,0,0,0-2.1,0L8.8,15.2a1.6,1.6,0,0,0,0,2.2,1.5,1.5,0,0,0,1.1.4,1.5,1.5,0,0,0,1.1-.4L12.4,16A1.6,1.6,0,0,0,12.4,13.8Z"/> <path d="M17.2,17.7v-2a1.6,1.6,0,0,0-1.6-1.6,1.6,1.6,0,0,0-1.5,1.6v2a1.5,1.5,0,0,0,1.5,1.5A1.6,1.6,0,0,0,17.2,17.7Z"/> <path d="M31.9,21V16.7H27.8V14.6a6,6,0,0,0-6.1-6H15.6a2,2,0,0,0,0,4h6.1a2,2,0,0,1,2.1,2v2.1H19.7V21a13.1,13.1,0,0,0-8.1,11.9c0,7.2,6.3,13.1,14.2,13.1S40,40.1,40,32.9A13.1,13.1,0,0,0,31.9,21ZM25.8,42c-5.6,0-10.2-4.1-10.2-9.1a9,9,0,0,1,5.7-8.2l2.5-1.1V20.7h4v2.9l2.4,1.1a8.9,8.9,0,0,1,5.7,8.2C35.9,37.9,31.4,42,25.8,42Z"/> </svg>',
         category: 'Games',
         description: 'Reveal all safe cells without hitting a mine. Tap to dig, toggle to flag.',
         version: '1.0.0',
@@ -63,7 +63,7 @@ export const STORE_CATALOG = [
     {
         id: 'habittracker',
         name: 'Habits',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <rect x="6" y="8" width="36" height="34" rx="6"/> <line x1="6" y1="18" x2="42" y2="18"/> <line x1="16" y1="4" x2="16" y2="12"/> <line x1="32" y1="4" x2="32" y2="12"/> <polyline points="16 28 22 34 34 24" stroke="#22c55e" stroke-width="3"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <rect x="6" y="8" width="36" height="34" rx="6"/> <line x1="6" y1="18" x2="42" y2="18"/> <line x1="16" y1="4" x2="16" y2="12"/> <line x1="32" y1="4" x2="32" y2="12"/> <polyline points="16 28 22 34 34 24" stroke="#22c55e" stroke-width="3"/> </svg>',
         category: 'Productivity',
         description: 'Build daily habits and track streaks. Never miss a day.',
         version: '1.0.0',
@@ -75,7 +75,7 @@ export const STORE_CATALOG = [
     {
         id: 'unitconverter',
         name: 'Converter',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <path d="M8 16 L40 16"/> <polyline points="32 8 40 16 32 24"/> <path d="M40 32 L8 32"/> <polyline points="16 24 8 32 16 40"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <path d="M8 16 L40 16"/> <polyline points="32 8 40 16 32 24"/> <path d="M40 32 L8 32"/> <polyline points="16 24 8 32 16 40"/> </svg>',
         category: 'Utilities',
         description: 'Convert length, weight, temperature and speed across all major units.',
         version: '1.0.0',
@@ -86,7 +86,7 @@ export const STORE_CATALOG = [
     {
         id: 'tipcalc',
         name: 'Tip Calc',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <rect x="10" y="6" width="28" height="36" rx="5"/> <line x1="16" y1="16" x2="32" y2="16"/> <line x1="16" y1="22" x2="32" y2="22"/> <line x1="16" y1="28" x2="24" y2="28"/> <circle cx="31" cy="35" r="8" fill="var(--bg-primary)" stroke="currentColor"/> <line x1="31" y1="31" x2="31" y2="39"/> <line x1="27" y1="35" x2="35" y2="35"/> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <rect x="10" y="6" width="28" height="36" rx="5"/> <line x1="16" y1="16" x2="32" y2="16"/> <line x1="16" y1="22" x2="32" y2="22"/> <line x1="16" y1="28" x2="24" y2="28"/> <circle cx="31" cy="35" r="8" fill="var(--bg-primary)" stroke="white"/> <line x1="31" y1="31" x2="31" y2="39"/> <line x1="27" y1="35" x2="35" y2="35"/> </svg>',
         category: 'Utilities',
         description: 'Split bills and calculate tips instantly. Supports any party size.',
         version: '1.0.0',
