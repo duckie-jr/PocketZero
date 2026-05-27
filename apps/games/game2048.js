@@ -2,10 +2,7 @@ import { AppRegistry } from '../registry.js';
 import { Router } from '../router.js';
 import { Store } from '../store.js';
 
-const ICON_2048 = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="4" y="4" width="40" height="40" rx="8" fill="#f59563"/>
-  <text x="24" y="31" font-size="15" font-weight="900" text-anchor="middle" fill="white" font-family="system-ui,sans-serif">2048</text>
-</svg>`;
+const ICON_2048 = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" stroke="currentColor" stroke-width="4" fill="none"/> <text x="24" y="30" font-size="15" font-weight="900" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">2048</text> </svg>`;
 
 const TILE_COLORS = {
     0:    { bg: 'rgba(0,0,0,0.06)', fg: 'transparent' },
