@@ -80,12 +80,8 @@ function unlock() {
 
 const lockScreen = document.getElementById('lock-screen');
 
-// pointerdown fires immediately on both mouse and touch (no 300ms delay, no swipe math)
+// Unlock on tap or click — pointerdown fires immediately on both mouse and touch
 lockScreen.addEventListener('pointerdown', unlock);
-
-// Auto-unlock after 2 seconds as a fallback for environments where
-// pointer events are swallowed (e.g. embedded iframes on mobile)
-setTimeout(unlock, 2000);
 
 // ── Status Bar ────────────────────────────────────────────────
 function updateStatusTime() {
