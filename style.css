@@ -148,11 +148,11 @@ svg {
     font-size: 15px;
   }
 
-  #lock-time {
+  #sleep-time {
     font-size: clamp(56px, 18vw, 80px);
   }
 
-  #lock-hint {
+  #sleep-hint {
     bottom: 28px;
   }
 
