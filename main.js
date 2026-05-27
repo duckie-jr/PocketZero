@@ -53,6 +53,7 @@ function updateSleepClock() {
 }
 
 function enterSleep() {
+    if (!sleepScreen) return;
     updateSleepClock();
     sleepClockInterval = setInterval(updateSleepClock, 1000);
     sleepScreen.style.opacity = '0';
@@ -64,6 +65,7 @@ function enterSleep() {
 }
 
 function exitSleep() {
+    if (!sleepScreen) return;
     sleepScreen.style.transition = 'opacity 0.3s ease';
     sleepScreen.style.opacity = '0';
     clearInterval(sleepClockInterval);
@@ -71,7 +73,9 @@ function exitSleep() {
     setTimeout(() => sleepScreen.classList.remove('active'), 300);
 }
 
-sleepScreen.addEventListener('pointerdown', exitSleep);
+if (sleepScreen) {
+    sleepScreen.addEventListener('pointerdown', exitSleep);
+}
 
 // ── Status Bar ────────────────────────────────────────────────
 function updateStatusTime() {
@@ -115,6 +119,7 @@ setTimeout(buildHomeScreen, 0);
 const defaultWallpaper = 'linear-gradient(160deg,#1a1a2e,#16213e)';
 const savedWallpaper = Store.get('wallpaper') ?? defaultWallpaper;
 const shellEl = document.getElementById('shell');
+shellEl.style.display = 'flex';   // force visible regardless of HTML attribute
 shellEl.style.background = savedWallpaper;
 
 // ── Global PocketZero API ─────────────────────────────────────
