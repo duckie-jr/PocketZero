@@ -30,58 +30,48 @@ function applyTheme(theme) {
 const savedTheme = Store.get('theme') ?? 'system';
 applyTheme(savedTheme);
 
-// ── Lock Screen ───────────────────────────────────────────────
-function formatLockTime() {
+// ── Sleep Screen ─────────────────────────────────────────────
+function formatSleepTime() {
     const now = new Date();
     return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatLockDate() {
+function formatSleepDate() {
     return new Date().toLocaleDateString([], {
         weekday: 'long', month: 'long', day: 'numeric',
     });
 }
 
-const lockTimeEl = document.getElementById('lock-time');
-const lockDateEl = document.getElementById('lock-date');
+const sleepScreen = document.getElementById('sleep-screen');
+const sleepTimeEl = document.getElementById('sleep-time');
+const sleepDateEl = document.getElementById('sleep-date');
+let sleepClockInterval = null;
 
-function updateLockClock() {
-    lockTimeEl.textContent = formatLockTime();
-    lockDateEl.textContent = formatLockDate();
+function updateSleepClock() {
+    sleepTimeEl.textContent = formatSleepTime();
+    sleepDateEl.textContent = formatSleepDate();
 }
 
-updateLockClock();
-setInterval(updateLockClock, 1000);
-
-function requestFullscreen() {
-    const docEl = document.documentElement;
-    const fullscreenRequest =
-        docEl.requestFullscreen?.() ??
-        docEl.webkitRequestFullscreen?.() ??
-        docEl.mozRequestFullScreen?.() ??
-        docEl.msRequestFullscreen?.();
-    // Suppress rejection if user/browser denies fullscreen (e.g. desktop iframe)
-    if (fullscreenRequest instanceof Promise) {
-        fullscreenRequest.catch(() => {});
-    }
+function enterSleep() {
+    updateSleepClock();
+    sleepClockInterval = setInterval(updateSleepClock, 1000);
+    sleepScreen.style.opacity = '0';
+    sleepScreen.classList.add('active');
+    requestAnimationFrame(() => {
+        sleepScreen.style.transition = 'opacity 0.4s ease';
+        sleepScreen.style.opacity = '1';
+    });
 }
 
-function unlock() {
-    const lockScreen = document.getElementById('lock-screen');
-    const shell = document.getElementById('shell');
-    lockScreen.style.transition = 'opacity 0.3s ease';
-    lockScreen.style.opacity = '0';
-    requestFullscreen();
-    setTimeout(() => {
-        lockScreen.style.display = 'none';
-        shell.style.display = 'flex';
-    }, 300);
+function exitSleep() {
+    sleepScreen.style.transition = 'opacity 0.3s ease';
+    sleepScreen.style.opacity = '0';
+    clearInterval(sleepClockInterval);
+    sleepClockInterval = null;
+    setTimeout(() => sleepScreen.classList.remove('active'), 300);
 }
 
-const lockScreen = document.getElementById('lock-screen');
-
-// Unlock on tap or click — pointerdown fires immediately on both mouse and touch
-lockScreen.addEventListener('pointerdown', unlock);
+sleepScreen.addEventListener('pointerdown', exitSleep);
 
 // ── Status Bar ────────────────────────────────────────────────
 function updateStatusTime() {
@@ -124,7 +114,8 @@ setTimeout(buildHomeScreen, 0);
 // Apply saved wallpaper (or default) to the shell so it shows behind the status bar
 const defaultWallpaper = 'linear-gradient(160deg,#1a1a2e,#16213e)';
 const savedWallpaper = Store.get('wallpaper') ?? defaultWallpaper;
-document.getElementById('shell').style.background = savedWallpaper;
+const shellEl = document.getElementById('shell');
+shellEl.style.background = savedWallpaper;
 
 // ── Global PocketZero API ─────────────────────────────────────
 // All modules are exposed here so apps loaded via the Play Store
@@ -152,6 +143,9 @@ window.PocketZero = {
     buildHomeScreen,
     // Background / persistent app manager
     Background,
+    // Sleep mode
+    enterSleep,
+    exitSleep,
 };
 
 // ── Home Bar — tap to go home ─────────────────────────────────
@@ -235,6 +229,14 @@ soundTile.addEventListener('click', () => {
     soundEnabled = !soundEnabled;
     Store.set('sound', soundEnabled);
     soundTile.classList.toggle('active', soundEnabled);
+});
+
+// Sleep tile
+const sleepTile = document.getElementById('cc-sleep');
+sleepTile.addEventListener('click', () => {
+    closeControlCenter();
+    // Small delay so the control center closes before sleep fades in
+    setTimeout(enterSleep, 180);
 });
 
 // Brightness slider
