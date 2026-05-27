@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pocketzero-v3';
+const CACHE_NAME = 'pocketzero-v4';
 
 // Build absolute precache URLs from the SW's actual scope at runtime,
 // so this works at any deployment path (e.g. /PocketZero/ on GitHub Pages).
@@ -40,6 +40,26 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  const requestUrl = new URL(event.request.url);
+  const isJsOrCss = requestUrl.pathname.endsWith('.js') || requestUrl.pathname.endsWith('.css');
+
+  if (isJsOrCss) {
+    // Network-first for scripts and styles so edits are always picked up immediately.
+    // Falls back to cache only when offline.
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.ok && requestUrl.href.startsWith(self.registration.scope)) {
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse.clone()));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Cache-first for everything else (HTML, images, manifests)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
