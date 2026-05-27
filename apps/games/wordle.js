@@ -2,10 +2,7 @@ import { AppRegistry } from '../registry.js';
 import { Router } from '../router.js';
 import { Store } from '../store.js';
 
-const ICON_WORDLE = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="6" width="36" height="36" rx="3" stroke="#000000" stroke-width="4"/>
-  <path d="M14 16L18 32L24 19L30 32L34 16" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+const ICON_WORDLE = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="currentColor" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>`;
 
 const WORD_LIST = [
     'CRANE','SLATE','STORM','PLANE','GRAPE','BRAVE','FLUTE','GLOBE','SHARK','TIGER',
