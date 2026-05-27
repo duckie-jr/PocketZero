@@ -36,7 +36,7 @@ function renderStars(rating) {
 
 // Deterministic pastel color from a string
 function appIconColor(name) {
-    const palette = ['#8b5cf6','#ec4899','#f59e0b','#22c55e','#06b6d4','#ef4444','#6366f1','#14b8a6','#f97316'];
+    const palette = ['#000000','#404040'];
     let hash = 0;
     for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) & 0xffff;
     return palette[hash % palette.length];
