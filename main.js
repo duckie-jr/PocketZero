@@ -79,24 +79,13 @@ function unlock() {
 }
 
 const lockScreen = document.getElementById('lock-screen');
-// Desktop fallback: click to unlock
-lockScreen.addEventListener('click', unlock);
 
-let lockTouchStartY = 0;
-let lockTouchStartTime = 0;
+// pointerdown fires immediately on both mouse and touch (no 300ms delay, no swipe math)
+lockScreen.addEventListener('pointerdown', unlock);
 
-lockScreen.addEventListener('touchstart', (e) => {
-    lockTouchStartY = e.touches[0].clientY;
-    lockTouchStartTime = Date.now();
-}, { passive: true });
-
-lockScreen.addEventListener('touchend', (e) => {
-    const swipeDistance = lockTouchStartY - e.changedTouches[0].clientY;
-    const touchDuration = Date.now() - lockTouchStartTime;
-    const isSwipeUp = swipeDistance > 30;
-    const isTap = Math.abs(swipeDistance) < 15 && touchDuration < 350;
-    if (isSwipeUp || isTap) unlock();
-}, { passive: true });
+// Auto-unlock after 2 seconds as a fallback for environments where
+// pointer events are swallowed (e.g. embedded iframes on mobile)
+setTimeout(unlock, 2000);
 
 // ── Status Bar ────────────────────────────────────────────────
 function updateStatusTime() {
