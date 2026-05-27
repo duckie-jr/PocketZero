@@ -2,13 +2,7 @@ import { AppRegistry } from './registry.js';
 import { Router } from './router.js';
 import { Store } from './store.js';
 
-const ICON_HABITS = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="6" y="8" width="36" height="34" rx="6"/>
-  <line x1="6" y1="18" x2="42" y2="18"/>
-  <line x1="16" y1="4" x2="16" y2="12"/>
-  <line x1="32" y1="4" x2="32" y2="12"/>
-  <polyline points="16 28 22 34 34 24" stroke="#22c55e" stroke-width="3"/>
-</svg>`;
+const ICON_HABITS = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <rect x="6" y="8" width="36" height="34" rx="6"/> <line x1="6" y1="18" x2="42" y2="18"/> <line x1="16" y1="4" x2="16" y2="12"/> <line x1="32" y1="4" x2="32" y2="12"/> <polyline points="16 28 22 34 34 24" stroke="white" stroke-width="3"/> </svg>`;
 
 AppRegistry.register({
     id: 'habittracker',
