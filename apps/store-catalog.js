@@ -6,7 +6,7 @@ export const STORE_CATALOG = [
     {
         id: 'snake',
         name: 'Snake',
-        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="10,38 10,16 26,16 26,30 38,30 38,16"/><rect x="32" y="10" width="11" height="9" rx="3" fill="currentColor" stroke="none"/><circle cx="14" cy="43" r="3.5" fill="currentColor" stroke="none"/></svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"> <polyline points="10,38 10,16 26,16 26,30 38,30 38,16"/> <rect x="32" y="10" width="11" height="9" rx="3" fill="currentColor" stroke="none"/> <circle cx="14" cy="43" r="3.5" fill="currentColor" stroke="none"/> </svg>',
         category: 'Games',
         description: "Classic snake game. Eat food, grow longer, don't hit the walls.",
         version: '1.0.0',
