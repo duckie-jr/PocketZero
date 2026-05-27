@@ -53,11 +53,25 @@ function updateLockClock() {
 updateLockClock();
 setInterval(updateLockClock, 1000);
 
+function requestFullscreen() {
+    const docEl = document.documentElement;
+    const fullscreenRequest =
+        docEl.requestFullscreen?.() ??
+        docEl.webkitRequestFullscreen?.() ??
+        docEl.mozRequestFullScreen?.() ??
+        docEl.msRequestFullscreen?.();
+    // Suppress rejection if user/browser denies fullscreen (e.g. desktop iframe)
+    if (fullscreenRequest instanceof Promise) {
+        fullscreenRequest.catch(() => {});
+    }
+}
+
 function unlock() {
     const lockScreen = document.getElementById('lock-screen');
     const shell = document.getElementById('shell');
     lockScreen.style.transition = 'opacity 0.3s ease';
     lockScreen.style.opacity = '0';
+    requestFullscreen();
     setTimeout(() => {
         lockScreen.style.display = 'none';
         shell.style.display = 'flex';
