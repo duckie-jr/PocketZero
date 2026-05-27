@@ -113,10 +113,10 @@ function renderPlayStore(container) {
             const categories = [...new Set(filtered.map(app => app.category))];
             catalogList.innerHTML = categories.map(category => {
                 const catApps = filtered.filter(app => app.category === category);
-                const catMeta = CATEGORY_META[category] ?? { emoji: '📦' };
+                const catMeta = CATEGORY_META[category] ?? { icon: '' };
                 return '<div style="margin-bottom:20px">' +
-                    '<div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">' +
-                    '<span style="font-size:16px">' + catMeta.emoji + '</span>' +
+                    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+                    '<div style="width:18px;height:18px;color:var(--text-secondary)">' + catMeta.icon + '</div>' +
                     '<span style="font-size:13px;font-weight:700;color:var(--text-primary)">' + escapeHtml(category) + '</span>' +
                     '<span style="font-size:11px;color:var(--text-muted)">(' + catApps.length + ')</span>' +
                     '</div>' +
@@ -127,7 +127,7 @@ function renderPlayStore(container) {
 
                         let btnLabel, btnDisabled, btnExtraStyle;
                         if (isBuiltIn) {
-                            btnLabel      = '📦 Built-in';
+                            btnLabel      = 'Built-in';
                             btnDisabled   = true;
                             btnExtraStyle = 'opacity:0.55;color:var(--text-muted)';
                         } else if (isInstalled) {
@@ -141,8 +141,8 @@ function renderPlayStore(container) {
                         }
 
                         return '<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:10px 12px">' +
-                            '<div style="width:52px;height:52px;border-radius:14px;background:' + iconBg + ';display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 2px 8px ' + iconBg + '66">' +
-                            app.emoji + '</div>' +
+                            '<div style="width:52px;height:52px;border-radius:14px;background:' + iconBg + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px ' + iconBg + '66;color:white;padding:10px">' +
+                            app.icon + '</div>' +
                             '<div style="flex:1;min-width:0">' +
                             '<div style="font-size:15px;font-weight:700;color:var(--text-primary)">' + escapeHtml(app.name) + '</div>' +
                             '<div style="font-size:11px;color:var(--text-muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHtml(app.description) + '</div>' +
@@ -195,7 +195,7 @@ function renderPlayStore(container) {
         body.innerHTML = `
             <!-- URL Loader -->
             <div class="card" style="margin-bottom:10px">
-                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px">🌐 Load from URL</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Load from URL</div>
                 <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.5">
                     Paste a link to a <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">.js</code> file
                     (e.g. a raw GitHub URL). The code is fetched and loaded into the editor below.
@@ -209,7 +209,7 @@ function renderPlayStore(container) {
 
             <!-- Code editor -->
             <div class="card" style="margin-bottom:10px">
-                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px">✏️ Code Editor</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Code Editor</div>
                 <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;line-height:1.5">
                     Write or paste JS below. Call <code style="background:var(--bg-tertiary);padding:1px 5px;border-radius:4px;font-size:11px">AppRegistry.register({…})</code>
                     to add an app. One file can register <strong>multiple apps</strong>.
@@ -226,7 +226,7 @@ function renderPlayStore(container) {
                 <div style="display:flex;gap:8px;margin-top:10px">
                     <button class="pz-btn" id="run-custom-app" style="flex:1">▶ Run &amp; Install</button>
                     <label class="pz-btn secondary" style="cursor:pointer;flex:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px">
-                        📁 Load File
+                        Load File
                         <input type="file" id="custom-app-file" accept=".js,text/javascript" style="display:none"/>
                     </label>
                     <button class="pz-btn secondary" id="clear-custom-code" style="padding:10px 12px">✕</button>
@@ -236,7 +236,7 @@ function renderPlayStore(container) {
 
             <!-- Template -->
             <div class="card">
-                <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:6px">📋 Starter Template</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Starter Template</div>
                 <pre style="font-size:11px;color:var(--text-secondary);background:var(--bg-tertiary);padding:12px;border-radius:8px;overflow-x:auto;line-height:1.6;white-space:pre-wrap;margin:0">AppRegistry.register({
   id: 'myapp',
   name: 'My App',
@@ -255,7 +255,7 @@ function renderPlayStore(container) {
   }
 });</pre>
                 <div style="margin-top:8px;font-size:11px;color:var(--text-muted);line-height:1.5">
-                    💡 <strong>Bundle tip:</strong> Call <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">AppRegistry.register()</code> multiple times in one file to install several apps at once.
+                    <strong>Bundle tip:</strong> Call <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">AppRegistry.register()</code> multiple times in one file to install several apps at once.
                 </div>
             </div>`;
 
@@ -344,7 +344,7 @@ function renderPlayStore(container) {
                     <span style="font-size:12px;font-weight:700;background:var(--bg-tertiary);padding:2px 8px;border-radius:10px;color:var(--text-muted)">${installedApps.length}</span>
                 </div>
                 ${installedApps.length === 0
-                    ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0"><div style="font-size:28px;margin-bottom:6px">📦</div>No third-party apps yet.<br><span style="font-size:11px">Browse the catalog or use the Custom tab.</span></div>'
+                    ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">No third-party apps yet.<br><span style="font-size:11px">Browse the catalog or use the Custom tab.</span></div>'
                     : installedApps.map(app => `
                         <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
                             <div style="width:38px;height:38px;border-radius:10px;background:${appIconColor(app.name)};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:white">
