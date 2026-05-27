@@ -177,6 +177,7 @@ svg {
   gap: 8px;
   cursor: pointer;
   user-select: none;
+  touch-action: manipulation;
 }
 
 #lock-time {
