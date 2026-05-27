@@ -121,7 +121,16 @@ function renderSettings(container) {
                 <!-- Danger zone -->
                 <div class="card" style="border:1px solid var(--danger)20">
                     <div style="font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;margin-bottom:12px">DATA</div>
-                    <button class="pz-btn danger" id="clear-data-btn" style="width:100%">Clear All Data</button>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <div style="display:flex;gap:8px">
+                            <button class="pz-btn secondary" id="export-data-btn" style="flex:1">Export Data</button>
+                            <label class="pz-btn secondary" id="import-data-label" style="flex:1;text-align:center;cursor:pointer">
+                                Import Data
+                                <input type="file" id="import-data-input" accept=".json,application/json" style="display:none" />
+                            </label>
+                        </div>
+                        <button class="pz-btn danger" id="clear-data-btn" style="width:100%">Clear All Data</button>
+                    </div>
                 </div>
 
             </div>
@@ -197,6 +206,59 @@ function renderSettings(container) {
                 Notify.show('All data cleared');
                 Router.home();
             }
+        });
+
+        // Export — serialise all Store data and download as a .json file
+        document.getElementById('export-data-btn').addEventListener('click', () => {
+            const jsonString = Store.export();
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const downloadUrl = URL.createObjectURL(blob);
+
+            const anchor = document.createElement('a');
+            anchor.href = downloadUrl;
+            anchor.download = `pocketzero-backup-${new Date().toISOString().slice(0, 10)}.json`;
+            anchor.click();
+
+            URL.revokeObjectURL(downloadUrl);
+            Notify.show('Data exported');
+        });
+
+        // Import — read a .json backup file and merge it into the Store,
+        // then re-apply all settings that affect the live UI immediately.
+        document.getElementById('import-data-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                try {
+                    Store.import(evt.target.result);
+
+                    // Re-read every setting so the live UI reflects the imported values
+                    currentTheme    = Store.getOrDefault('theme', 'system');
+                    currentFontSize = Store.getOrDefault('font-size', 16);
+                    currentGridCols = Store.getOrDefault('grid-cols', 4);
+                    soundEnabled    = Store.getOrDefault('sound', true) !== false;
+                    currentWallpaper = Store.getOrDefault('wallpaper', WALLPAPERS[0].value);
+
+                    // Re-apply visual settings that live outside this container
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    const isDark = currentTheme === 'dark' || (currentTheme === 'system' && prefersDark);
+                    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                    applyFontSize(currentFontSize);
+                    applyWallpaper(currentWallpaper);
+                    window.PocketZero?.buildHomeScreen();
+
+                    Notify.show('Data imported');
+                    render();
+                } catch {
+                    Notify.show('Import failed — invalid file');
+                }
+
+                // Reset file input so the same file can be re-selected if needed
+                e.target.value = '';
+            };
+            reader.readAsText(file);
         });
     }
 
