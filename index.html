@@ -3,25 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-
-  <!-- PWA install / display -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="PocketZero" />
-
-  <!-- Theme / branding -->
   <meta name="theme-color" content="#0a0a1a" />
-  <meta name="msapplication-TileColor" content="#0a0a1a" />
-  <meta name="msapplication-config" content="none" />
-  <meta name="application-name" content="PocketZero" />
-
-  <!-- SEO / Open Graph -->
   <meta name="description" content="A lightweight iOS-inspired web OS shell." />
   <meta property="og:title" content="PocketZero" />
   <meta property="og:description" content="A lightweight iOS-inspired web OS shell." />
   <meta property="og:type" content="website" />
-
   <title>PocketZero</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
@@ -29,47 +19,33 @@
 </head>
 <body>
 
-  <!-- Rotate screen shown on portrait phones -->
-  <div id="rotate-screen">
-    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="6" width="28" height="36" rx="4"/>
-      <path d="M38 24 A14 14 0 1 1 30 11"/>
-      <polyline points="30,6 30,12 36,12"/>
-    </svg>
-    <p>Rotate your device to landscape</p>
-  </div>
-
-  <!-- Sleep screen — shown via control centre, tap anywhere to dismiss -->
+  <!-- Sleep screen — tap anywhere to wake -->
   <div id="sleep-screen">
     <div id="sleep-time"></div>
     <div id="sleep-date"></div>
     <div id="sleep-hint">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
         <polyline points="18 15 12 9 6 15"/>
       </svg>
       <span>tap to wake</span>
     </div>
   </div>
 
-  <!-- Main shell -->
+  <!-- Main shell — visible immediately on load -->
   <div id="shell">
 
-    <!-- Status bar -->
     <div id="status-bar">
       <span id="status-time"></span>
-
     </div>
 
-    <!-- Notification banner -->
     <div id="notification-banner"></div>
 
-    <!-- Home screen icon grid -->
     <div id="home-screen"></div>
 
-    <!-- App window — apps render into this -->
     <div id="app-window" style="display:none"></div>
 
-    <!-- Control Center (swipe up from bottom) -->
+    <!-- Control Center -->
     <div id="control-center">
       <div id="cc-handle"></div>
       <div id="cc-controls">
@@ -84,7 +60,8 @@
           </div>
           <div class="cc-tile" id="cc-sleep">
             <div class="cc-tile-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
             </div>
@@ -100,12 +77,11 @@
       </div>
     </div>
 
-    <!-- Bottom home bar -->
     <div id="home-bar"></div>
 
   </div>
 
-  <!-- Dialog overlay — managed by apps/dialog.js -->
+  <!-- Dialog overlay -->
   <div id="dialog-overlay" style="
     display: none;
     position: fixed;
