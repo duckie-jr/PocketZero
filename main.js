@@ -65,15 +65,23 @@ function unlock() {
 }
 
 const lockScreen = document.getElementById('lock-screen');
+// Desktop fallback: click to unlock
 lockScreen.addEventListener('click', unlock);
 
 let lockTouchStartY = 0;
+let lockTouchStartTime = 0;
+
 lockScreen.addEventListener('touchstart', (e) => {
     lockTouchStartY = e.touches[0].clientY;
+    lockTouchStartTime = Date.now();
 }, { passive: true });
+
 lockScreen.addEventListener('touchend', (e) => {
     const swipeDistance = lockTouchStartY - e.changedTouches[0].clientY;
-    if (swipeDistance > 50) unlock();
+    const touchDuration = Date.now() - lockTouchStartTime;
+    const isSwipeUp = swipeDistance > 30;
+    const isTap = Math.abs(swipeDistance) < 15 && touchDuration < 350;
+    if (isSwipeUp || isTap) unlock();
 }, { passive: true });
 
 // ── Status Bar ────────────────────────────────────────────────
