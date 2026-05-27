@@ -102,9 +102,64 @@ svg {
   50% { transform: rotate(90deg); }
 }
 
+/* Portrait phones: never block the UI — just hide the rotate hint */
 @media (orientation: portrait) and (max-width: 768px) {
-  #rotate-screen { display: flex; }
-  #lock-screen, #shell { display: none !important; }
+  #rotate-screen { display: none; }
+}
+
+/* ============================================================
+   Mobile Portrait — Responsive Layout
+   ============================================================ */
+@media (max-width: 600px) {
+  :root {
+    --icon-size: 52px;
+    --icon-radius: 13px;
+    --status-height: 28px;
+    --home-bar-height: 22px;
+  }
+
+  #home-screen {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 6px;
+    padding: 16px 12px;
+    align-content: start;
+    padding-top: 20px;
+  }
+
+  #home-screen.five-col {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .app-icon-image svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .app-icon-label {
+    font-size: 10px;
+    max-width: 60px;
+  }
+
+  .app-chrome {
+    height: 44px;
+  }
+
+  .app-chrome-title {
+    font-size: 15px;
+  }
+
+  #lock-time {
+    font-size: clamp(56px, 18vw, 80px);
+  }
+
+  #lock-hint {
+    bottom: 28px;
+  }
+
+  .cc-tile {
+    padding: 10px 8px;
+    font-size: 10px;
+  }
 }
 
 /* ============================================================
