@@ -11,16 +11,16 @@ import { Notify } from './apps/notify.js';
 import { ICON_DARKMODE, ICON_VOLUME } from './icons/svg.js';
 import './apps/index.js';
 
-// Register service worker for PWA installability (required by Chrome for install prompt)
+// Register service worker for PWA installability
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch((error) => {
-      console.warn('Service worker registration failed:', error);
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => {
+            console.warn('Service worker registration failed:', error);
+        });
     });
-  });
 }
 
-// ── Theme ────────────────────────────────────────────────────
+// ── Theme ─────────────────────────────────────────────────────
 function applyTheme(theme) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
@@ -30,10 +30,22 @@ function applyTheme(theme) {
 const savedTheme = Store.get('theme') ?? 'system';
 applyTheme(savedTheme);
 
-// ── Sleep Screen ─────────────────────────────────────────────
+// ── Shell — force visible immediately ─────────────────────────
+const shellEl = document.getElementById('shell');
+if (shellEl) {
+    shellEl.style.display = 'flex';
+    const defaultWallpaper = 'linear-gradient(160deg,#1a1a2e,#16213e)';
+    shellEl.style.background = Store.get('wallpaper') ?? defaultWallpaper;
+}
+
+// ── Sleep Screen ──────────────────────────────────────────────
+const sleepScreen  = document.getElementById('sleep-screen');
+const sleepTimeEl  = document.getElementById('sleep-time');
+const sleepDateEl  = document.getElementById('sleep-date');
+let   sleepClockInterval = null;
+
 function formatSleepTime() {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatSleepDate() {
@@ -42,14 +54,9 @@ function formatSleepDate() {
     });
 }
 
-const sleepScreen = document.getElementById('sleep-screen');
-const sleepTimeEl = document.getElementById('sleep-time');
-const sleepDateEl = document.getElementById('sleep-date');
-let sleepClockInterval = null;
-
 function updateSleepClock() {
-    sleepTimeEl.textContent = formatSleepTime();
-    sleepDateEl.textContent = formatSleepDate();
+    if (sleepTimeEl) sleepTimeEl.textContent = formatSleepTime();
+    if (sleepDateEl) sleepDateEl.textContent = formatSleepDate();
 }
 
 function enterSleep() {
@@ -80,10 +87,11 @@ if (sleepScreen) {
 // ── Status Bar ────────────────────────────────────────────────
 function updateStatusTime() {
     const statusTimeEl = document.getElementById('status-time');
-    const now = new Date();
-    statusTimeEl.textContent = now.toLocaleTimeString([], {
-        hour: '2-digit', minute: '2-digit',
-    });
+    if (statusTimeEl) {
+        statusTimeEl.textContent = new Date().toLocaleTimeString([], {
+            hour: '2-digit', minute: '2-digit',
+        });
+    }
 }
 
 updateStatusTime();
@@ -92,6 +100,8 @@ setInterval(updateStatusTime, 1000);
 // ── Home Screen Builder ───────────────────────────────────────
 function buildHomeScreen() {
     const homeScreen = document.getElementById('home-screen');
+    if (!homeScreen) return;
+
     const fiveCol = Store.get('grid-cols') === 5;
     homeScreen.classList.toggle('five-col', fiveCol);
     homeScreen.innerHTML = '';
@@ -108,57 +118,37 @@ function buildHomeScreen() {
         homeScreen.appendChild(iconWrapper);
     });
 
-    // Re-apply any existing badge counts after the icons are rebuilt
     Badge.refresh();
 }
 
-// Rebuild home screen after all apps have registered
 setTimeout(buildHomeScreen, 0);
 
-// Apply saved wallpaper (or default) to the shell so it shows behind the status bar
-const defaultWallpaper = 'linear-gradient(160deg,#1a1a2e,#16213e)';
-const savedWallpaper = Store.get('wallpaper') ?? defaultWallpaper;
-const shellEl = document.getElementById('shell');
-shellEl.style.display = 'flex';   // force visible regardless of HTML attribute
-shellEl.style.background = savedWallpaper;
-
 // ── Global PocketZero API ─────────────────────────────────────
-// All modules are exposed here so apps loaded via the Play Store
-// custom code runner can access the full API without imports.
 window.PocketZero = {
-    // Navigation
     Router,
-    // App registry
     AppRegistry,
-    // Persistence
     Store,
-    // Notifications
     Notify,
-    // iOS-style modal dialogs
     Dialog,
-    // Pub/sub inter-app messaging
     EventBus,
-    // Home screen icon badges
     Badge,
-    // Web Audio tone/beep utilities
     Sound,
-    // Fetch wrapper with JSON + timeout
     Http,
-    // Rebuild the home screen icon grid
     buildHomeScreen,
-    // Background / persistent app manager
     Background,
-    // Sleep mode
     enterSleep,
     exitSleep,
 };
 
-// ── Home Bar — tap to go home ─────────────────────────────────
-document.getElementById('home-bar').addEventListener('click', () => {
-    if (document.getElementById('app-window').style.display !== 'none') {
-        Router.home();
-    }
-});
+// ── Home Bar ──────────────────────────────────────────────────
+const homeBarEl = document.getElementById('home-bar');
+if (homeBarEl) {
+    homeBarEl.addEventListener('click', () => {
+        if (document.getElementById('app-window')?.style.display !== 'none') {
+            Router.home();
+        }
+    });
+}
 
 // ── Control Center ────────────────────────────────────────────
 const controlCenter = document.getElementById('control-center');
@@ -167,35 +157,36 @@ let ccIsOpen = false;
 
 function openControlCenter() {
     ccIsOpen = true;
-    controlCenter.classList.add('open');
+    if (controlCenter) controlCenter.classList.add('open');
 }
 
 function closeControlCenter() {
     ccIsOpen = false;
-    controlCenter.classList.remove('open');
+    if (controlCenter) controlCenter.classList.remove('open');
 }
 
-document.getElementById('home-bar').addEventListener('touchstart', (e) => {
-    ccTouchStartY = e.touches[0].clientY;
-}, { passive: true });
+if (homeBarEl) {
+    homeBarEl.addEventListener('touchstart', (e) => {
+        ccTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
 
-document.getElementById('home-bar').addEventListener('touchmove', (e) => {
-    const swipeUp = ccTouchStartY - e.touches[0].clientY;
-    if (swipeUp > 20) openControlCenter();
-}, { passive: true });
+    homeBarEl.addEventListener('touchmove', (e) => {
+        if (ccTouchStartY - e.touches[0].clientY > 20) openControlCenter();
+    }, { passive: true });
+}
 
-controlCenter.addEventListener('touchstart', (e) => {
-    ccTouchStartY = e.touches[0].clientY;
-}, { passive: true });
+if (controlCenter) {
+    controlCenter.addEventListener('touchstart', (e) => {
+        ccTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
 
-controlCenter.addEventListener('touchmove', (e) => {
-    const swipeDown = e.touches[0].clientY - ccTouchStartY;
-    if (swipeDown > 30) closeControlCenter();
-}, { passive: true });
+    controlCenter.addEventListener('touchmove', (e) => {
+        if (e.touches[0].clientY - ccTouchStartY > 30) closeControlCenter();
+    }, { passive: true });
+}
 
-// Click outside to close
 document.addEventListener('click', (e) => {
-    if (ccIsOpen && !controlCenter.contains(e.target)) {
+    if (ccIsOpen && controlCenter && !controlCenter.contains(e.target)) {
         closeControlCenter();
     }
 });
@@ -203,48 +194,54 @@ document.addEventListener('click', (e) => {
 // Dark mode tile
 const darkmodeIcon = document.getElementById('cc-darkmode-icon');
 const darkmodeTile = document.getElementById('cc-darkmode');
-darkmodeIcon.innerHTML = ICON_DARKMODE;
+if (darkmodeIcon) darkmodeIcon.innerHTML = ICON_DARKMODE;
 
 function refreshDarkmodeTile() {
-    const currentTheme = Store.get('theme') ?? 'system';
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    darkmodeTile.classList.toggle('active', isDark);
+    if (darkmodeTile) darkmodeTile.classList.toggle('active', isDark);
 }
 
-darkmodeTile.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    Store.set('theme', newTheme);
-    applyTheme(newTheme);
-    refreshDarkmodeTile();
-    EventBus.emit('theme:changed', newTheme);
-});
+if (darkmodeTile) {
+    darkmodeTile.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const newTheme = isDark ? 'light' : 'dark';
+        Store.set('theme', newTheme);
+        applyTheme(newTheme);
+        refreshDarkmodeTile();
+        EventBus.emit('theme:changed', newTheme);
+    });
+}
 
 refreshDarkmodeTile();
 
 // Sound tile
 const soundIcon = document.getElementById('cc-sound-icon');
 const soundTile = document.getElementById('cc-sound');
-soundIcon.innerHTML = ICON_VOLUME;
+if (soundIcon) soundIcon.innerHTML = ICON_VOLUME;
 
 let soundEnabled = Store.get('sound') !== false;
-soundTile.classList.toggle('active', soundEnabled);
-
-soundTile.addEventListener('click', () => {
-    soundEnabled = !soundEnabled;
-    Store.set('sound', soundEnabled);
+if (soundTile) {
     soundTile.classList.toggle('active', soundEnabled);
-});
+    soundTile.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        Store.set('sound', soundEnabled);
+        soundTile.classList.toggle('active', soundEnabled);
+    });
+}
 
 // Sleep tile
 const sleepTile = document.getElementById('cc-sleep');
-sleepTile.addEventListener('click', () => {
-    closeControlCenter();
-    // Small delay so the control center closes before sleep fades in
-    setTimeout(enterSleep, 180);
-});
+if (sleepTile) {
+    sleepTile.addEventListener('click', () => {
+        closeControlCenter();
+        setTimeout(enterSleep, 180);
+    });
+}
 
 // Brightness slider
-document.getElementById('cc-brightness').addEventListener('input', (e) => {
-    document.documentElement.style.filter = `brightness(${e.target.value}%)`;
-});
+const brightnessSlider = document.getElementById('cc-brightness');
+if (brightnessSlider) {
+    brightnessSlider.addEventListener('input', (e) => {
+        document.documentElement.style.filter = `brightness(${e.target.value}%)`;
+    });
+}
