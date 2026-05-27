@@ -110,7 +110,7 @@ function renderWeather(container) {
         if (savedLocation) {
             setBodyLoading('Refreshing…');
             fetchAndDisplay(savedLocation.lat, savedLocation.lon, savedLocation.name,
-                tempUnit, toDisplayTemp, unitLabel);
+                tempUnit, toDisplayTemp, unitLabel, onUnitToggle);
         } else {
             fetchFromGeolocation(toDisplayTemp, unitLabel);
         }
@@ -144,7 +144,7 @@ function renderWeather(container) {
         Store.remove('weather-cache');
         closeSearchPanel();
         setBodyLoading('Loading weather…');
-        await fetchAndDisplay(lat, lon, name, tempUnit, toDisplayTemp, unitLabel);
+        await fetchAndDisplay(lat, lon, name, tempUnit, toDisplayTemp, unitLabel, onUnitToggle);
     }
 
     // ── Location search (city / zip / raw coords) ─────────────
@@ -220,7 +220,7 @@ function renderWeather(container) {
                 try {
                     const cityName = await reverseGeocode(latitude, longitude);
                     Store.set('weather-location', { lat: latitude, lon: longitude, name: cityName });
-                    await fetchAndDisplay(latitude, longitude, cityName, tempUnit, toDisplayTemp, unitLabel);
+                    await fetchAndDisplay(latitude, longitude, cityName, tempUnit, toDisplayTemp, unitLabel, onUnitToggle);
                 } catch {
                     showError('Could not load weather for your location.');
                 }
@@ -241,7 +241,7 @@ function renderWeather(container) {
         } else {
             setBodyLoading('Updating weather…');
             fetchAndDisplay(savedLocation.lat, savedLocation.lon, savedLocation.name,
-                tempUnit, toDisplayTemp, unitLabel);
+                tempUnit, toDisplayTemp, unitLabel, onUnitToggle);
         }
     } else {
         fetchFromGeolocation();
@@ -298,11 +298,11 @@ function renderWeather(container) {
 
 // ── Data fetching ─────────────────────────────────────────────
 
-async function fetchAndDisplay(lat, lon, cityName, tempUnit, toDisplayTemp, unitLabel) {
+async function fetchAndDisplay(lat, lon, cityName, tempUnit, toDisplayTemp, unitLabel, onUnitToggle) {
     try {
         const weatherData = await fetchWeatherData(lat, lon);
         Store.set('weather-cache', weatherData, { ttlMs: WEATHER_CACHE_TTL_MS });
-        displayWeather(weatherData, cityName, toDisplayTemp, unitLabel, null);
+        displayWeather(weatherData, cityName, toDisplayTemp, unitLabel, onUnitToggle);
     } catch {
         const body = document.getElementById('weather-body');
         if (body) {
@@ -479,25 +479,6 @@ function displayWeather(data, cityName, toDisplayTemp, unitLabel, onUnitToggle) 
         </div>
     `;
 
-    // Wire the unit toggle — only if a callback was provided (not when rendering from cache after toggle)
-    if (onUnitToggle) {
-        document.getElementById('weather-unit-toggle')?.addEventListener('click', onUnitToggle);
-    } else {
-        // Re-attach with a fresh closure so the button still works after a cache render
-        const unitToggleBtn = document.getElementById('weather-unit-toggle');
-        if (unitToggleBtn) {
-            unitToggleBtn.addEventListener('click', () => {
-                const newUnit = unitLabel() === '°C' ? 'F' : 'C';
-                Store.set('weather-unit', newUnit);
-                // Re-render by reloading the app — simplest way to refresh all closures
-                const location = Store.get('weather-location');
-                const cachedData = Store.get('weather-cache');
-                if (cachedData && location) {
-                    const newToDisplay = (c) => newUnit === 'F' ? Math.round(c * 9 / 5 + 32) : Math.round(c);
-                    const newUnitLabel = () => newUnit === 'F' ? '°F' : '°C';
-                    displayWeather(cachedData, location.name, newToDisplay, newUnitLabel, null);
-                }
-            });
-        }
-    }
+    // Wire the unit toggle — onUnitToggle is always provided from renderWeather
+    document.getElementById('weather-unit-toggle')?.addEventListener('click', onUnitToggle);
 }
