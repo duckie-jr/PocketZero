@@ -18,7 +18,7 @@ export const STORE_CATALOG = [
     {
         id: 'wordle',
         name: 'Wordle',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" stroke="currentColor" stroke-width="4" fill="none"/> <text x="24" y="30" font-size="15" font-weight="900" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">2048</text> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="#000000" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
         category: 'Games',
         description: 'Guess the 5-letter word in 6 tries. Color-coded hints after each guess.',
         version: '1.0.0',
@@ -29,7 +29,7 @@ export const STORE_CATALOG = [
     {
         id: 'game2048',
         name: '2048',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" fill="#f59563"/> <text x="24" y="31" font-size="15" font-weight="900" text-anchor="middle" fill="white" font-family="system-ui,sans-serif">2048</text> </svg>',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="4" y="4" width="40" height="40" rx="8" stroke="currentColor" stroke-width="4" fill="none"/> <text x="24" y="30" font-size="15" font-weight="900" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">2048</text> </svg>',
         category: 'Games',
         description: 'Slide tiles to combine matching numbers and reach 2048.',
         version: '1.0.0',
