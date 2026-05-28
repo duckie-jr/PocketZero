@@ -18,7 +18,7 @@ export const STORE_CATALOG = [
     {
         id: 'wordle',
         name: 'Wordle',
-        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="white" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>',',
+        icon: '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="6" y="6" width="36" height="36" rx="3" stroke="white" stroke-width="4"/> <path d="M14 16L18 32L24 19L30 32L34 16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
         category: 'Games',
         description: 'Guess the 5-letter word in 6 tries. Color-coded hints after each guess.',
         version: '1.0.0',
