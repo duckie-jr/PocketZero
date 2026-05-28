@@ -424,8 +424,9 @@ function displayWeather(data, cityName, toDisplayTemp, unitLabel, onUnitToggle) 
         `;
     }).join('');
 
+    body.style.background = info.bg;
     body.innerHTML = `
-        <div style="background:${info.bg};min-height:100%;padding-bottom:24px">
+        <div style="padding-bottom:24px">
 
             <div style="padding:28px 24px 16px;text-align:center;color:#fff">
                 <div style="font-size:17px;font-weight:500;opacity:0.85;margin-bottom:2px">${cityName}</div>
