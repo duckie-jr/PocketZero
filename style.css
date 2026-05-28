@@ -277,13 +277,15 @@ svg {
   font-weight: 500;
   box-shadow: var(--shadow);
   z-index: 50;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
   white-space: nowrap;
   pointer-events: none;
 }
 
 #notification-banner.visible {
   transform: translateX(-50%) translateY(8px);
+  opacity: 1;
 }
 
 /* ============================================================
