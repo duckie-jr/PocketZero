@@ -43,6 +43,7 @@ const sleepScreen  = document.getElementById('sleep-screen');
 const sleepTimeEl  = document.getElementById('sleep-time');
 const sleepDateEl  = document.getElementById('sleep-date');
 let   sleepClockInterval = null;
+let   sleepLocked = false;
 
 function formatSleepTime() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -59,8 +60,9 @@ function updateSleepClock() {
     if (sleepDateEl) sleepDateEl.textContent = formatSleepDate();
 }
 
-function enterSleep() {
+function enterSleep({ locked = false } = {}) {
     if (!sleepScreen) return;
+    sleepLocked = locked;
     updateSleepClock();
     sleepClockInterval = setInterval(updateSleepClock, 1000);
     sleepScreen.style.opacity = '0';
@@ -80,8 +82,12 @@ function exitSleep() {
     setTimeout(() => sleepScreen.classList.remove('active'), 300);
 }
 
+function lockSleep() { sleepLocked = true; }
+function unlockSleep() { sleepLocked = false; }
+function isSleeping() { return sleepScreen?.classList.contains('active') ?? false; }
+
 if (sleepScreen) {
-    sleepScreen.addEventListener('pointerdown', exitSleep);
+    sleepScreen.addEventListener('pointerdown', () => { if (!sleepLocked) exitSleep(); });
 }
 
 // ── Status Bar ────────────────────────────────────────────────
@@ -138,6 +144,9 @@ window.PocketZero = {
     Background,
     enterSleep,
     exitSleep,
+    lockSleep,
+    unlockSleep,
+    isSleeping,
 };
 
 // ── Home Bar ──────────────────────────────────────────────────
