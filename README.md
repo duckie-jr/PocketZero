@@ -1,5 +1,6 @@
 # PocketZero
 
+
 A web OS shell that runs in the browser. Looks and feels like a phone OS — lock screen, home screen, apps, control center. Built with vanilla HTML, CSS, and JS, no frameworks.
 
 **Live:** [duckie-jr.github.io/PocketZero](https://duckie-jr.github.io/PocketZero/)
