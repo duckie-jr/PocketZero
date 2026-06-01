@@ -881,6 +881,50 @@ function renderFreeMoviesApp(container) {
   function fmGetPlaylists()          { return fmStore.get('playlists') ?? []; }
   function fmSavePlaylists(lists)    { fmStore.set('playlists', lists); }
 
+  function fmSeedStarterPlaylist() {
+    if (fmStore.get('starterSeeded')) return;
+
+    const starterItems = [
+      // ── Movies ──
+      { id: 'tt0468569', title: 'The Dark Knight',                   mediaType: 'movie', year: '2008', posterUrl: '' },
+      { id: 'tt1375666', title: 'Inception',                         mediaType: 'movie', year: '2010', posterUrl: '' },
+      { id: 'tt0816692', title: 'Interstellar',                      mediaType: 'movie', year: '2014', posterUrl: '' },
+      { id: 'tt0111161', title: 'The Shawshank Redemption',          mediaType: 'movie', year: '1994', posterUrl: '' },
+      { id: 'tt0110912', title: 'Pulp Fiction',                      mediaType: 'movie', year: '1994', posterUrl: '' },
+      { id: 'tt6751668', title: 'Parasite',                          mediaType: 'movie', year: '2019', posterUrl: '' },
+      { id: 'tt6710474', title: 'Everything Everywhere All at Once', mediaType: 'movie', year: '2022', posterUrl: '' },
+      { id: 'tt1160419', title: 'Dune',                              mediaType: 'movie', year: '2021', posterUrl: '' },
+      { id: 'tt1745960', title: 'Top Gun: Maverick',                 mediaType: 'movie', year: '2022', posterUrl: '' },
+      { id: 'tt2278388', title: 'The Grand Budapest Hotel',          mediaType: 'movie', year: '2014', posterUrl: '' },
+      { id: 'tt0137523', title: 'Fight Club',                        mediaType: 'movie', year: '1999', posterUrl: '' },
+      { id: 'tt0109830', title: 'Forrest Gump',                      mediaType: 'movie', year: '1994', posterUrl: '' },
+      { id: 'tt0133093', title: 'The Matrix',                        mediaType: 'movie', year: '1999', posterUrl: '' },
+      { id: 'tt0245429', title: 'Spirited Away',                     mediaType: 'movie', year: '2001', posterUrl: '' },
+      { id: 'tt0317248', title: 'City of God',                       mediaType: 'movie', year: '2002', posterUrl: '' },
+      // ── TV Shows ──
+      { id: 'tt0903747',  title: 'Breaking Bad',     mediaType: 'tv', year: '2008', posterUrl: '' },
+      { id: 'tt0944947',  title: 'Game of Thrones',  mediaType: 'tv', year: '2011', posterUrl: '' },
+      { id: 'tt4574334',  title: 'Stranger Things',  mediaType: 'tv', year: '2016', posterUrl: '' },
+      { id: 'tt14452776', title: 'The Bear',         mediaType: 'tv', year: '2022', posterUrl: '' },
+      { id: 'tt11280740', title: 'Severance',        mediaType: 'tv', year: '2022', posterUrl: '' },
+      { id: 'tt3581920',  title: 'The Last of Us',   mediaType: 'tv', year: '2023', posterUrl: '' },
+      { id: 'tt4834232',  title: 'Succession',       mediaType: 'tv', year: '2018', posterUrl: '' },
+      { id: 'tt7366338',  title: 'Chernobyl',        mediaType: 'tv', year: '2019', posterUrl: '' },
+      { id: 'tt2085059',  title: 'Black Mirror',     mediaType: 'tv', year: '2011', posterUrl: '' },
+      { id: 'tt0386676',  title: 'The Office',       mediaType: 'tv', year: '2005', posterUrl: '' },
+      { id: 'tt2861424',  title: 'Rick and Morty',   mediaType: 'tv', year: '2013', posterUrl: '' },
+      { id: 'tt0773262',  title: 'Dexter',           mediaType: 'tv', year: '2006', posterUrl: '' },
+      { id: 'tt0455275',  title: 'Prison Break',     mediaType: 'tv', year: '2005', posterUrl: '' },
+      { id: 'tt1520211',  title: 'The Walking Dead', mediaType: 'tv', year: '2010', posterUrl: '' },
+      { id: 'tt0096697',  title: 'The Simpsons',     mediaType: 'tv', year: '1989', posterUrl: '' },
+    ];
+
+    const existingLists = fmGetPlaylists();
+    existingLists.unshift({ id: 'fm-starter', name: '🎬 Staff Picks', items: starterItems });
+    fmSavePlaylists(existingLists);
+    fmStore.set('starterSeeded', true);
+  }
+
   function fmCreatePlaylist(name) {
     const lists = fmGetPlaylists();
     lists.push({ id: Date.now().toString(), name, items: [] });
@@ -1276,7 +1320,7 @@ function renderFreeMoviesApp(container) {
       section.classList.toggle('hidden', section.id !== `fm-${tabName}-section`);
     });
     if (tabName === 'tv'      && !$('fm-tv-grid').children.length) fmLoadTv(1);
-    if (tabName === 'profile') { fmRenderHistory(); fmRenderPlaylists(); }
+    if (tabName === 'profile') { fmRenderHistory(); fmRenderPlaylists(); fmRenderAccountCard(); }
   }
 
   // ── Dev panel (` while player open) ──────────────────────────────────────────
@@ -1612,29 +1656,8 @@ function renderFreeMoviesApp(container) {
     });
   }
 
-  // Patch fmSwitchTab to also render the account card on profile
-  const _origSwitchTab = fmSwitchTab;
-  function fmSwitchTab(tabName) {
-    _origSwitchTab(tabName);
-    if (tabName === 'profile') fmRenderAccountCard();
-  }
-
-  // Patch the tab listeners to use the patched version
-  container.querySelectorAll('.fm-tab').forEach(tabBtn => {
-    // Remove old listener by replacing the element clone approach isn't needed —
-    // just re-use the override. The original listeners call _origSwitchTab,
-    // so we just re-register on tabs.
-  });
-
-  // Re-wire tab bar with patched function
-  container.querySelectorAll('.fm-tab').forEach(tabBtn => {
-    // Clone to remove old listener, then add new one
-    const freshBtn = tabBtn.cloneNode(true);
-    tabBtn.parentNode.replaceChild(freshBtn, tabBtn);
-    freshBtn.addEventListener('click', () => fmSwitchTab(freshBtn.dataset.tab));
-  });
-
   // ── Initial data load + gate check ───────────────────────────────────────────
+  fmSeedStarterPlaylist();
   fmLoadMovies(1);
 
   // Show gate on first open if user hasn't accepted yet
