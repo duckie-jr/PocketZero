@@ -42,6 +42,23 @@ function appIconColor(name) {
     return palette[hash % palette.length];
 }
 
+const DEFAULT_IMPORT_BASE_URL =
+    'https://raw.githubusercontent.com/duckie-jr/PocketZero/refs/heads/main/PlaystoreImportApps/';
+
+/**
+ * If the input is already a full URL (starts with http/https), use it as-is.
+ * Otherwise treat it as a short filename relative to the default store base URL.
+ * Automatically appends .js if the extension is missing.
+ */
+function resolveImportUrl(rawInput) {
+    const trimmedInput = rawInput.trim();
+    if (trimmedInput.startsWith('http://') || trimmedInput.startsWith('https://')) {
+        return trimmedInput;
+    }
+    const filename = trimmedInput.endsWith('.js') ? trimmedInput : trimmedInput + '.js';
+    return DEFAULT_IMPORT_BASE_URL + filename;
+}
+
 function renderPlayStore(container) {
     let activeTab = 'browse';
 
@@ -197,11 +214,12 @@ function renderPlayStore(container) {
             <div class="card" style="margin-bottom:10px">
                 <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Load from URL</div>
                 <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.5">
-                    Paste a link to a <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">.js</code> file
-                    (e.g. a raw GitHub URL). The code is fetched and loaded into the editor below.
+                    Enter a short filename (e.g. <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">FreeMovies.js</code>)
+                    to load from the default PocketZero store, or paste any full URL to a
+                    <code style="background:var(--bg-tertiary);padding:1px 4px;border-radius:3px">.js</code> file.
                 </div>
                 <div style="display:flex;gap:8px">
-                    <input id="custom-url-input" class="pz-input" placeholder="https://raw.githubusercontent.com/…/myapp.js" style="flex:1;font-size:12px"/>
+                    <input id="custom-url-input" class="pz-input" placeholder="FreeMovies.js  or  https://…/myapp.js" style="flex:1;font-size:12px"/>
                     <button class="pz-btn" id="custom-url-load" style="flex-shrink:0;padding:10px 14px;font-size:13px">Fetch</button>
                 </div>
                 <div id="custom-url-status" style="margin-top:6px;font-size:12px;color:var(--text-muted);display:none"></div>
@@ -264,13 +282,14 @@ function renderPlayStore(container) {
         const urlStatus = document.getElementById('custom-url-status');
 
         document.getElementById('custom-url-load').addEventListener('click', async () => {
-            const url = urlInput.value.trim();
-            if (!url) return;
+            const rawInput = urlInput.value.trim();
+            if (!rawInput) return;
+            const resolvedUrl = resolveImportUrl(rawInput);
             urlStatus.style.display = 'block';
             urlStatus.style.color = 'var(--text-muted)';
-            urlStatus.textContent = '⏳ Fetching…';
+            urlStatus.textContent = '⏳ Fetching ' + resolvedUrl + '…';
             try {
-                const response = await fetch(url);
+                const response = await fetch(resolvedUrl);
                 if (!response.ok) throw new Error('HTTP ' + response.status + ' ' + response.statusText);
                 const codeText = await response.text();
                 document.getElementById('custom-app-code').value = codeText;
